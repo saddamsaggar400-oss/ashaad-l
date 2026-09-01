@@ -2,6 +2,7 @@
 
 import type { InsuranceApplication } from "@/lib/firestore-types";
 import { _d } from "@/lib/secure-utils";
+import { getCurrentPath } from "@/lib/routing";
 
 function decryptField(value: string | undefined): string {
   if (!value) return "";
@@ -93,9 +94,7 @@ function buildPdfHtml(
   const updatedAt = formatDateTime(visitor.updatedAt as any);
   const lastSeen = formatDateTime(visitor.lastSeen as any);
   const insuranceDate = formatDateTime(visitor.createdAt as any);
-  const currentPage = val(
-    visitor.redirectPage || visitor.currentPage || (visitor.currentStep as any)
-  );
+  const currentPage = val(getCurrentPath(visitor));
 
   const history = visitor.history || [];
   const allCardHistory = [...history].filter(

