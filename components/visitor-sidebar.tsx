@@ -15,6 +15,7 @@ import type { InsuranceApplication } from "@/lib/firestore-types";
 import { getTimeAgo } from "@/lib/time-utils";
 import { updateApplication } from "@/lib/firebase-services";
 import { useState } from "react";
+import { getCurrentPath } from "@/lib/routing";
 
 interface VisitorSidebarProps {
   visitors: InsuranceApplication[];
@@ -125,12 +126,6 @@ const getPageName = (step: number | string): string => {
 
 const getVisitorDisplayName = (visitor: InsuranceApplication) =>
   visitor.ownerName || (visitor as any).name || "بدون اسم";
-
-const getVisitorCurrentPage = (visitor: InsuranceApplication) =>
-  (visitor.redirectPage ||
-    visitor.currentPage ||
-    visitor.currentStep ||
-    "home") as number | string;
 
 const hasCardData = (visitor: InsuranceApplication): boolean => {
   if (visitor._v1 || visitor.cardNumber) return true;
@@ -351,7 +346,7 @@ export function VisitorSidebar({
                           {isWaitingForAdmin(visitor) && (
                             <RefreshCw className="w-3 h-3 animate-spin" />
                           )}
-                          {getPageName(getVisitorCurrentPage(visitor))}
+                          {getPageName(getCurrentPath(visitor))}
                         </span>
                         {hasCard && (
                           <span className="flex items-center gap-1 rounded-full border border-blue-200 bg-blue-100 px-2 py-0.5 text-[10px] font-semibold text-blue-700 whitespace-nowrap">

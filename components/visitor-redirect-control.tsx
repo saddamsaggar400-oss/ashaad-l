@@ -53,6 +53,7 @@ const CardContent = ({ children, className }: any) => (
 );
 import { db } from "@/lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
+import { getRoutingUpdate, type RoutingPage } from "@/lib/routing";
 import {
   ArrowRight,
   Home,
@@ -70,7 +71,12 @@ interface VisitorRedirectControlProps {
   currentPage?: string;
 }
 
-const pages = [
+const pages: Array<{
+  id: RoutingPage;
+  name: string;
+  icon: typeof Home;
+  step: number;
+}> = [
   { id: "home", name: "الصفحة الرئيسية", icon: Home, step: 1 },
   { id: "insur", name: "بيانات التأمين", icon: FileText, step: 2 },
   { id: "compar", name: "مقارنة العروض", icon: GitCompare, step: 3 },
@@ -90,7 +96,7 @@ export function VisitorRedirectControl({
   const [loading, setLoading] = useState(false);
   const [selectedPage, setSelectedPage] = useState<string | null>(null);
 
-  const handleRedirect = async (targetPage: string) => {
+  const handleRedirect = async (targetPage: RoutingPage) => {
     if (!visitorId) {
       alert("معرف الزائر غير موجود");
       return;
@@ -103,7 +109,7 @@ export function VisitorRedirectControl({
       const visitorRef = doc(db, "pays", visitorId);
 
       await updateDoc(visitorRef, {
-        redirectPage: targetPage,
+        ...getRoutingUpdate(targetPage),
         redirectRequestedAt: new Date().toISOString(),
         redirectRequestedBy: "admin",
       });
