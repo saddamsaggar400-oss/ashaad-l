@@ -33,10 +33,10 @@ export default function LoginPage() {
 
   const handleSendLink = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    setMessage("");
-    setLoading(true);
-    try {
+    if (email.trim().toLowerCase() !== "netlify022@gmail.com") {
+  setError("رابط الدخول متاح للبريد المعتمد فقط.");
+  return;
+}
       await sendSignInLinkToEmail(auth, email, {
         url: `${window.location.origin}/login`,
         handleCodeInApp: true,
